@@ -16,6 +16,9 @@
         💰 calcular
       </button>
     </div>
+    <div id="loading" class="hidden text-blue-500 text-center">
+      <p>Cargando...</p>
+    </div>
     <div id="result" class="hidden">
       <div class="flex flex-col items-center">
         <img id="avatar" class="w-24 h-24 rounded-full mb-4" alt="Profile Picture" />
@@ -32,6 +35,9 @@
           <p id="value" class="text-2xl font-bold text-green-700"></p>
         </div>
       </div>
+    </div>
+    <div id="error" class="hidden text-red-500 text-center">
+      <p>No se pueden hacer más peticiones en este momento. Por favor, inténtalo más tarde.</p>
     </div>
   </div>
 </div>
