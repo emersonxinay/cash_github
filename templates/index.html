@@ -1,80 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GitHub Value Estimator</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <script>
-      async function estimateValue() {
-          const username = document.getElementById('username').value;
-          const response = await fetch(`/value?username=${username}`);
-          const data = await response.json();
-          if (response.ok) {
-              document.getElementById('avatar').src = data.avatar_url;
-              document.getElementById('username_display').innerText = data.name || data.login;
-              document.getElementById('username_link').href = `https://github.com/${data.login}`;
-              document.getElementById('repos').innerText = `Total Stars: ${data.public_repos}`;
-              document.getElementById('followers').innerText = `Total Followers: ${data.followers}`;
-              document.getElementById('contributions').innerText = `Total Contributions: ${data.contributions}`;
-              document.getElementById('value').innerText = `$ ${data.value}`;
-              document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
-              document.getElementById('result').style.display = 'block';
-          } else {
-              document.getElementById('result').innerText = `Error: ${data.error}`;
-          }
-      }
-    </script>
-  </head>
-  <body class="bg-gray-100 flex justify-center items-center h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
-      <h1 class="text-3xl font-bold mb-4 text-center">
-        Estimate GitHub Worth Generator
-      </h1>
-      <div class="mb-4 text-center">
-        <input
-          type="text"
-          id="username"
-          class="border rounded py-2 px-4 w-full max-w-lg"
-          placeholder="GitHub Username"
-        />
-      </div>
-      <div class="text-center">
-        <button
-          onclick="estimateValue()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-        >
-          Generate Worth
-        </button>
-      </div>
-      <div id="result" class="hidden">
-        <div class="flex flex-col items-center">
-          <img
-            id="avatar"
-            class="w-24 h-24 rounded-full mb-4"
-            alt="Profile Picture"
-          />
-          <a id="username_link" class="text-lg font-bold" target="_blank">
-            <p id="username_display"></p>
-          </a>
-          <div class="flex space-x-4 mt-4">
-            <p id="repos" class="bg-gray-100 p-2 rounded-md"></p>
-            <p id="followers" class="bg-gray-100 p-2 rounded-md"></p>
-            <p id="contributions" class="bg-gray-100 p-2 rounded-md"></p>
-          </div>
-          <img
-            id="contributions_graph"
-            class="mt-4"
-            alt="GitHub Contributions"
-          />
-          <div class="bg-green-100 p-4 rounded-md mt-4">
-            <p id="value" class="text-2xl font-bold text-green-700"></p>
-          </div>
+{% extends 'base.html' %}
+{% block principal %}
+
+
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mx-auto flex justify-center">
+  <div>
+    <h1 class="text-3xl font-bold mb-4 text-center">
+      Calcula cuánto vale tu GitHub
+    </h1>
+    <div class="mb-4 text-center">
+      <input type="text" id="username" class="border rounded py-2 px-4 w-full max-w-lg" placeholder="GitHub Username" />
+    </div>
+    <div class="text-center">
+      <button onclick="estimateValue()"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+        💰 calcular
+      </button>
+    </div>
+    <div id="result" class="hidden">
+      <div class="flex flex-col items-center">
+        <img id="avatar" class="w-24 h-24 rounded-full mb-4" alt="Profile Picture" />
+        <a id="username_link" class="text-lg font-bold" target="_blank">
+          <p id="username_display"></p>
+        </a>
+        <div class="flex space-x-4 mt-4">
+          <p id="repos" class="bg-gray-100 p-2 rounded-md"></p>
+          <p id="followers" class="bg-gray-100 p-2 rounded-md"></p>
+          <p id="contributions" class="bg-gray-100 p-2 rounded-md"></p>
+        </div>
+        <img id="contributions_graph" class="mt-4" alt="GitHub Contributions" />
+        <div class="bg-green-100 p-4 rounded-md mt-4">
+          <p id="value" class="text-2xl font-bold text-green-700"></p>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>
+
+<script src="../static/js/main.js"></script>
+
+{% endblock %}
