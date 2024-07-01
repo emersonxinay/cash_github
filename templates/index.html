@@ -10,16 +10,20 @@
   </div>
   <div class="flex flex-col items-center">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-      <button onclick="estimateValue('repos')" class="button-style">
+      <button onclick="estimateValue('repos')"
+        class="button-style bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 sm:mb-0 sm:mr-4">
         💰 Calcular por repositorios
       </button>
-      <button onclick="estimateValue('stars')" class="button-style">
+      <button onclick="estimateValue('stars')"
+        class="button-style bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 sm:mb-0 sm:mr-4">
         ⭐ Calcular por estrellas
       </button>
-      <button onclick="estimateValue('followers_repos')" class="button-style">
+      <button onclick="estimateValue('followers_repos')"
+        class="button-style bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 sm:mb-0 sm:mr-4">
         📊 Calcular por seguidores y repositorios
       </button>
-      <button onclick="estimateValue('total')" class="button-style">
+      <button onclick="estimateValue('total')"
+        class="button-style bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 sm:mb-0 sm:mr-4">
         🏆 Calcular valor total
       </button>
     </div>
@@ -120,26 +124,5 @@
   }
 </script>
 
-<style>
-  @media (max-width: 640px) {
-    .button-style {
-      width: 100%;
-      margin-bottom: 8px;
-    }
 
-    .info-box {
-      width: 100%;
-      margin-bottom: 8px;
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    .sm:flex-row {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-</style>
 {% endblock %}
