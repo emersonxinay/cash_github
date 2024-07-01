@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block principal %}
 
-
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mx-auto flex justify-center">
   <div>
     <h1 class="text-3xl font-bold mb-4 text-center">
@@ -48,9 +47,11 @@
 
     // Mostrar indicador de carga
     document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('error').classList.add('hidden');
 
-    // Realizar la petición AJAX a la API de GitHub
-    fetch(`https://api.github.com/users/${username}`)
+    // Realizar la petición AJAX a la API de Flask
+    fetch(`/value?username=${username}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
@@ -65,30 +66,27 @@
         document.getElementById('result').classList.remove('hidden');
 
         // Actualizar los elementos con los datos del usuario
-        if (response.ok) {
-          document.getElementById('avatar').src = data.avatar_url;
-          document.getElementById('username_display').innerText = data.name || data.login;
-          document.getElementById('username_link').href = `https://github.com/${data.login}`;
-          document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
-          document.getElementById('followers').innerText = `Followers: ${data.followers}`;
-          document.getElementById('contributions').innerText = `Contributions: ${data.contributions}`;
-          document.getElementById('value').innerText = `$ ${data.value}`;
-          document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
-        } else {
-          document.getElementById('result').innerText = `Error: ${data.error}`;
-        }
+        document.getElementById('avatar').src = data.avatar_url;
+        document.getElementById('username_display').innerText = data.name || data.login;
+        document.getElementById('username_link').href = `https://github.com/${data.login}`;
+        document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
+        document.getElementById('followers').innerText = `Followers: ${data.followers}`;
+        document.getElementById('contributions').innerText = `Contributions: ${data.contributions}`;
+        document.getElementById('value').innerText = `$ ${data.value}`;
+        document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
       })
       .catch(error => {
         // Ocultar indicador de carga
         document.getElementById('loading').classList.add('hidden');
 
         // Mostrar mensaje de error
-        document.getElementById('error').classList.remove('hidden');
-        console.error('Error:', error.message);
+        if (error.message.includes('403')) {
+          document.getElementById('error').classList.remove('hidden');
+        } else {
+          console.error('Error:', error.message);
+        }
       });
   }
-  console.log('corriendo');
 </script>
-
 
 {% endblock %}
