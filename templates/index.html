@@ -1,59 +1,64 @@
 {% extends 'base.html' %}
-{% block principal %}
 
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mx-auto flex justify-center">
-  <div>
-    <h1 class="text-3xl font-bold mb-4 text-center">
-      Calcula cuánto vale tu GitHub
-    </h1>
-    <div class="mb-4 text-center">
-      <input type="text" id="username" class="border rounded py-2 px-4 w-full max-w-lg" placeholder="GitHub Username" />
-    </div>
-    <div class="text-center">
-      <button onclick="estimateValue('repos')"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+{% block principal %}
+<div class="bg-white p-4 sm:p-8 rounded-lg shadow-lg w-full max-w-3xl mx-auto">
+  <h1 class="text-2xl sm:text-3xl font-bold mb-4 text-center">
+    Calcula cuánto vale tu GitHub
+  </h1>
+  <div class="mb-4 text-center">
+    <input type="text" id="username" class="border rounded py-2 px-4 w-full max-w-lg" placeholder="GitHub Username" />
+  </div>
+  <div class="flex flex-col items-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+      <button onclick="estimateValue('repos')" class="button-style">
         💰 Calcular por repositorios
       </button>
-      <button onclick="estimateValue('stars')"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+      <button onclick="estimateValue('stars')" class="button-style">
         ⭐ Calcular por estrellas
       </button>
-      <button onclick="estimateValue('followers_repos')"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+      <button onclick="estimateValue('followers_repos')" class="button-style">
         📊 Calcular por seguidores y repositorios
       </button>
-      <button onclick="estimateValue('total')"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+      <button onclick="estimateValue('total')" class="button-style">
         🏆 Calcular valor total
       </button>
     </div>
-    <div id="loading" class="hidden text-blue-500 text-center">
+    <div id="loading" class="hidden text-blue-500 text-center mt-4">
       <p>Cargando...</p>
     </div>
-    <div id="result" class="hidden">
+    <div id="result" class="hidden mt-4">
       <div class="flex flex-col items-center">
-        <img id="avatar" class="w-24 h-24 rounded-full mb-4" alt="Profile Picture" />
-        <a id="username_link" class="text-lg font-bold" target="_blank">
+        <img id="avatar" class="w-20 sm:w-24 h-20 sm:h-24 rounded-full mb-4" alt="Profile Picture" />
+        <a id="username_link" class="text-base sm:text-lg font-bold" target="_blank">
           <p id="username_display"></p>
         </a>
-        <div class="flex space-x-4 mt-4">
-          <p id="repos" class="bg-gray-100 p-2 rounded-md"></p>
-          <p id="followers" class="bg-gray-100 p-2 rounded-md"></p>
-          <p id="contributions" class="bg-gray-100 p-2 rounded-md"></p>
-          <p id="stars" class="bg-gray-100 p-2 rounded-md"></p> <!-- Agregado para mostrar estrellas -->
+        <div
+          class="flex flex-wrap justify-center space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row sm:justify-start mt-2 sm:mt-4">
+          <div class="w-full sm:w-auto mb-2 sm:mb-0">
+            <p id="repos" class="info-box"></p>
+          </div>
+          <div class="w-full sm:w-auto mb-2 sm:mb-0">
+            <p id="followers" class="info-box"></p>
+          </div>
+          <div class="w-full sm:w-auto mb-2 sm:mb-0">
+            <p id="contributions" class="info-box"></p>
+          </div>
+          <div class="w-full sm:w-auto mb-2 sm:mb-0">
+            <p id="stars" class="info-box"></p>
+          </div>
         </div>
-        <img id="contributions_graph" class="mt-4" alt="GitHub Contributions" />
-        <div class="bg-green-100 p-4 rounded-md mt-4">
-          <p id="value" class="text-2xl font-bold text-green-700"></p>
+        <img id="contributions_graph" class="w-full mt-4" alt="GitHub Contributions" />
+        <div class="bg-green-100 p-2 sm:p-4 rounded-md mt-4">
+          <p id="value" class="text-lg sm:text-2xl font-bold text-green-700"></p>
         </div>
-        <div class="bg-green-100 p-4 rounded-md mt-4 hidden" id="additional_values">
-          <p id="value_repos" class="text-lg font-bold text-green-700"></p>
-          <p id="value_stars" class="text-lg font-bold text-green-700"></p>
-          <p id="value_followers_repos" class="text-lg font-bold text-green-700"></p>
+        <div class="bg-green-100 p-2 sm:p-4 rounded-md mt-4 hidden" id="additional_values">
+          <p id="value_repos" class="text-base sm:text-lg font-bold text-green-700"></p>
+          <p id="value_stars" class="text-base sm:text-lg font-bold text-green-700"></p>
+          <p id="value_followers_repos" class="text-base sm:text-lg font-bold text-green-700"></p>
         </div>
       </div>
     </div>
-    <div id="error" class="hidden text-red-500 text-center">
+    <div id="error" class="hidden text-red-500 text-center mt-4">
       <p>No se pueden hacer más peticiones en este momento. Por favor, inténtalo más tarde.</p>
     </div>
   </div>
@@ -90,7 +95,7 @@
         document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
         document.getElementById('followers').innerText = `Followers: ${data.followers}`;
         document.getElementById('contributions').innerText = `Contributions: ${data.contributions}`;
-        document.getElementById('stars').innerText = `Total Stars: ${data.total_stars}`; // Agregado para mostrar estrellas
+        document.getElementById('stars').innerText = `Total Stars: ${data.total_stars}`;
         document.getElementById('value').innerText = `$ ${data.value}`;
         document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
 
@@ -115,4 +120,26 @@
   }
 </script>
 
+<style>
+  @media (max-width: 640px) {
+    .button-style {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .info-box {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .sm:flex-row {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
 {% endblock %}
