@@ -10,9 +10,21 @@
       <input type="text" id="username" class="border rounded py-2 px-4 w-full max-w-lg" placeholder="GitHub Username" />
     </div>
     <div class="text-center">
-      <button onclick="estimateValue()"
+      <button onclick="estimateValue('repos')"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
-        💰 calcular
+        💰 Calcular por repositorios
+      </button>
+      <button onclick="estimateValue('stars')"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+        ⭐ Calcular por estrellas
+      </button>
+      <button onclick="estimateValue('followers_repos')"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+        📊 Calcular por seguidores y repositorios
+      </button>
+      <button onclick="estimateValue('total')"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+        🏆 Calcular valor total
       </button>
     </div>
     <div id="loading" class="hidden text-blue-500 text-center">
@@ -28,10 +40,16 @@
           <p id="repos" class="bg-gray-100 p-2 rounded-md"></p>
           <p id="followers" class="bg-gray-100 p-2 rounded-md"></p>
           <p id="contributions" class="bg-gray-100 p-2 rounded-md"></p>
+          <p id="stars" class="bg-gray-100 p-2 rounded-md"></p> <!-- Agregado para mostrar estrellas -->
         </div>
         <img id="contributions_graph" class="mt-4" alt="GitHub Contributions" />
         <div class="bg-green-100 p-4 rounded-md mt-4">
           <p id="value" class="text-2xl font-bold text-green-700"></p>
+        </div>
+        <div class="bg-green-100 p-4 rounded-md mt-4 hidden" id="additional_values">
+          <p id="value_repos" class="text-lg font-bold text-green-700"></p>
+          <p id="value_stars" class="text-lg font-bold text-green-700"></p>
+          <p id="value_followers_repos" class="text-lg font-bold text-green-700"></p>
         </div>
       </div>
     </div>
@@ -42,7 +60,7 @@
 </div>
 
 <script>
-  function estimateValue() {
+  function estimateValue(criteria) {
     var username = document.getElementById('username').value;
 
     // Mostrar indicador de carga
@@ -51,7 +69,7 @@
     document.getElementById('error').classList.add('hidden');
 
     // Realizar la petición AJAX a la API de Flask
-    fetch(`/value?username=${username}`)
+    fetch(`/value/${criteria}?username=${username}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
@@ -72,19 +90,27 @@
         document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
         document.getElementById('followers').innerText = `Followers: ${data.followers}`;
         document.getElementById('contributions').innerText = `Contributions: ${data.contributions}`;
+        document.getElementById('stars').innerText = `Total Stars: ${data.total_stars}`; // Agregado para mostrar estrellas
         document.getElementById('value').innerText = `$ ${data.value}`;
         document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
+
+        // Mostrar valores adicionales si están disponibles
+        if (criteria === 'total') {
+          document.getElementById('additional_values').classList.remove('hidden');
+          document.getElementById('value_repos').innerText = `Valor por repos: $${data.value_repos}`;
+          document.getElementById('value_stars').innerText = `Valor por estrellas: $${data.value_stars}`;
+          document.getElementById('value_followers_repos').innerText = `Valor por seguidores y repos: $${data.value_followers_repos}`;
+        } else {
+          document.getElementById('additional_values').classList.add('hidden');
+        }
       })
       .catch(error => {
         // Ocultar indicador de carga
         document.getElementById('loading').classList.add('hidden');
 
         // Mostrar mensaje de error
-        if (error.message.includes('403')) {
-          document.getElementById('error').classList.remove('hidden');
-        } else {
-          console.error('Error:', error.message);
-        }
+        document.getElementById('error').classList.remove('hidden');
+        console.error('Error:', error.message);
       });
   }
 </script>
