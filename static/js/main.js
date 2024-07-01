@@ -42,3 +42,4 @@ function estimateValue() {
       console.error('Error:', error.message);
     });
 }
+console.log('corriendo');
