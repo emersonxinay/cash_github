@@ -89,7 +89,7 @@ def fetch_user_data(username):
         }
     )
     if response.status_code != 200:
-        return {'error': 'Failed to fetch user data'}
+        return {'error': 'Failed to fetch user data  {response.status_code}'}
 
     user_data = response.json()
     user_data['contributions'] = get_contributions(username)

@@ -20,18 +20,18 @@ function estimateValue() {
       document.getElementById('result').classList.remove('hidden');
 
       // Actualizar los elementos con los datos del usuario
-      if (response.ok) {
-        document.getElementById('avatar').src = data.avatar_url;
-        document.getElementById('username_display').innerText = data.name || data.login;
-        document.getElementById('username_link').href = `https://github.com/${data.login}`;
-        document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
-        document.getElementById('followers').innerText = `Followers: ${data.followers}`;
-        document.getElementById('contributions').innerText = `Contributions: ${data.contributions}`;
-        document.getElementById('value').innerText = `$ ${data.value}`;
-        document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
-      } else {
-        document.getElementById('result').innerText = `Error: ${data.error}`;
-      }
+      document.getElementById('avatar').src = data.avatar_url;
+      document.getElementById('username_display').innerText = data.name || data.login;
+      document.getElementById('username_link').href = `https://github.com/${data.login}`;
+      document.getElementById('repos').innerText = `Total Repos: ${data.public_repos}`;
+      document.getElementById('followers').innerText = `Followers: ${data.followers}`;
+
+      // Como 'contributions' y 'value' no están en la respuesta de la API de GitHub, los puedes eliminar o asignarles valores por defecto
+      document.getElementById('contributions').innerText = `Contributions: No data`; // GitHub no proporciona directamente este dato
+      document.getElementById('value').innerText = `$ Not available`;
+
+      // Generar gráfico de contribuciones
+      document.getElementById('contributions_graph').src = `https://ghchart.rshah.org/${data.login}`;
     })
     .catch(error => {
       // Ocultar indicador de carga
@@ -42,4 +42,3 @@ function estimateValue() {
       console.error('Error:', error.message);
     });
 }
-console.log('corriendo');
